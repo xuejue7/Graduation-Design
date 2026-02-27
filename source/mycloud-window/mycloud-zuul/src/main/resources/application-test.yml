@@ -1,0 +1,7 @@
+##Mysql数据库配置
+datasource:
+  master:
+    url: jdbc:mysql://127.0.0.1:3306/cloud-ida?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    driverClassName: com.mysql.jdbc.Driver
+    username: root
+    password: 123456

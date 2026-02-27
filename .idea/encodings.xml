@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/source/file-online-preview-master/jodconverter-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/file-online-preview-master/jodconverter-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/file-online-preview-master/jodconverter-web/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-admin-windows/mycloud-admin-windows/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/mycloud-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/mycloud-config/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/mycloud-eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/mycloud-service/mycloud-service-test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/mycloud-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/mycloud-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/mycloud-zuul/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/source/mycloud-window/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

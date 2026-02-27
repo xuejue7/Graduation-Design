@@ -1,0 +1,15 @@
+##Mysql数据库配置
+datasource:
+  master:
+    # 【已修改】IP改为127.0.0.1，数据库名改成了 chat (如果你昨天建库叫 cloud_disk，这里就填 cloud_disk)
+    url: jdbc:mysql://127.0.0.1:3306/chat?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    driverClassName: com.mysql.jdbc.Driver
+    username: root    # 【重要】改成你本地电脑的 MySQL 用户名（通常是 root）
+    password: 123456  # 【重要】改成你本地电脑的 MySQL 密码
+
+file:
+  seeUrl: http://localhost:8012/disk/
+
+ribbon:
+  ReadTimeout: 100000
+  ConnectTimeout: 100000
