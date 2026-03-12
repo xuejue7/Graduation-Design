@@ -13,7 +13,21 @@ $(function () {
 					'<span class="label label-danger">禁用</span>' :
 					'<span class="label label-success">正常</span>';
 			}},
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85}
+            {
+                label: '创建时间',
+                name: 'createTime',
+                index: 'create_time',
+                width: 80,
+                formatter: function(value, options, row) {
+                    if (!value) return ''; // 如果没有时间，就显示为空
+                    var date = new Date(value);
+                    var y = date.getFullYear();
+                    var m = date.getMonth() + 1;
+                    var d = date.getDate();
+                    // 拼接成你要的“2012年1月12日”格式
+                    return y + '年' + m + '月' + d + '日';
+                }
+            }
         ],
 		viewrecords: true,
         height: 385,

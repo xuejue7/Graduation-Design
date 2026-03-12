@@ -8,8 +8,21 @@ $(function () {
 			{ label: '企业ID,dept_id', name: 'companyId', index: 'company_id', width: 80 }, 			
 			{ label: '文件名', name: 'name', index: 'name', width: 80 }, 			
 			{ label: '是否有效', name: 'isValid', index: 'is_valid', width: 80 }, 			
-			{ label: '登录者', name: 'createUser', index: 'create_user', width: 80 }, 			
-			{ label: '登录时间', name: 'createTime', index: 'create_time', width: 80 }			
+			{ label: '登录者', name: 'createUser', index: 'create_user', width: 80 },
+			{
+				label: '创建时间',
+				name: 'createTime',
+				index: 'create_time',
+				width: 80,
+				formatter: function(value, options, row) {
+					if (!value) return '';
+					var date = new Date(value);
+					var y = date.getFullYear();
+					var m = date.getMonth() + 1;
+					var d = date.getDate();
+					return y + '年' + m + '月' + d + '日';
+				}
+			}
         ],
 		viewrecords: true,
         height: 385,

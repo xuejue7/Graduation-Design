@@ -13,7 +13,20 @@ $(function () {
 					'<span class="label label-danger">禁用</span>' :
 					'<span class="label label-success">正常</span>';
 			}},
-			{ label: '创建时间', name: 'createTime', index: "create_time", width: 85}
+            {
+                label: '创建时间',
+                name: 'createTime',
+                index: 'create_time',
+                width: 80,
+                formatter: function(value, options, row) {
+                    if (!value) return '';
+                    var date = new Date(value);
+                    var y = date.getFullYear();
+                    var m = date.getMonth() + 1;
+                    var d = date.getDate();
+                    return y + '年' + m + '月' + d + '日';
+                }
+            }
         ],
 		viewrecords: true,
         height: 385,

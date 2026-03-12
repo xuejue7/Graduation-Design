@@ -81,7 +81,7 @@ public class SysMenuController extends AbstractController {
 	/**
 	 * 保存
 	 */
-	@SysLog("保存菜单")
+	@SysLog("记录：管理员新增了一个系统菜单")
 	@RequestMapping("/save")
 	@RequiresPermissions("sys:menu:save")
 	public R save(@RequestBody SysMenuEntity menu){
@@ -94,7 +94,7 @@ public class SysMenuController extends AbstractController {
 	/**
 	 * 修改
 	 */
-	@SysLog("修改菜单")
+	@SysLog("记录：管理员修改了系统菜单的配置")
 	@RequestMapping("/update")
 	@RequiresPermissions("sys:menu:update")
 	public R update(@RequestBody SysMenuEntity menu){
@@ -107,13 +107,13 @@ public class SysMenuController extends AbstractController {
 	/**
 	 * 删除
 	 */
-	@SysLog("删除菜单")
+	@SysLog("警告：管理员执行了删除菜单的危险操作！")
 	@RequestMapping("/delete")
 	@RequiresPermissions("sys:menu:delete")
 	public R delete(long menuId){
-		if(menuId <= 31){
-			return R.error("系统菜单，不能删除");
-		}
+//		if(menuId <= 31){
+//			return R.error("系统菜单，不能删除");
+//		}
 		//判断是否有子菜单或按钮
 		List<SysMenuEntity> menuList = sysMenuService.queryListParentId(menuId);
 		if(menuList.size() > 0){
