@@ -376,3 +376,46 @@
 2026-03-14 01:54:10,448 [INFO] [http-nio-9000-exec-5] org.springframework.web.servlet.DispatcherServlet [FrameworkServlet.java : 494] FrameworkServlet 'dispatcherServlet': initialization started
 2026-03-14 01:54:10,495 [INFO] [http-nio-9000-exec-5] org.springframework.web.servlet.DispatcherServlet [FrameworkServlet.java : 509] FrameworkServlet 'dispatcherServlet': initialization completed in 47 ms
 2026-03-14 01:54:10,526 [INFO] [http-nio-9000-exec-5] o.apache.shiro.session.mgt.AbstractValidatingSessionManager [AbstractValidatingSessionManager.java : 233] Enabling session validation scheduler...
+2026-03-14 01:57:51,355 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:00:24,043 [INFO] [http-nio-8888-exec-6] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 02:02:51,371 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:07:08,818 [INFO] [http-nio-8888-exec-7] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 02:07:51,382 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:12:51,397 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:14:12,070 [INFO] [http-nio-8888-exec-2] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 02:17:51,400 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:20:50,928 [INFO] [http-nio-8888-exec-3] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 02:21:40,119 [INFO] [http-nio-8888-exec-2] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 02:22:51,406 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:27:51,409 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:32:51,424 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:37:51,430 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:42:51,441 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:47:51,450 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:52:51,467 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 02:54:10,546 [INFO] [SessionValidationThread-1] o.apache.shiro.session.mgt.AbstractValidatingSessionManager [AbstractValidatingSessionManager.java : 275] Validating all active sessions...
+2026-03-14 02:54:10,549 [INFO] [SessionValidationThread-1] o.apache.shiro.session.mgt.AbstractValidatingSessionManager [AbstractValidatingSessionManager.java : 308] Finished session validation.  No sessions were stopped.
+2026-03-14 02:54:52,513 [INFO] [http-nio-8888-exec-3] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 02:55:33,639 [INFO] [http-nio-8888-exec-9] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 02:55:34,867 [INFO] [http-nio-8888-exec-10] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 02:56:30,985 [INFO] [http-nio-8888-exec-8] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 02:57:51,475 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 03:02:33,735 [INFO] [http-nio-8888-exec-1] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 03:02:51,484 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 03:02:58,119 [INFO] [http-nio-8888-exec-7] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 03:03:14,733 [INFO] [http-nio-8888-exec-9] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 03:03:27,513 [INFO] [http-nio-8888-exec-10] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 03:03:36,847 [INFO] [http-nio-8888-exec-1] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 03:06:19,302 [INFO] [http-nio-8888-exec-4] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 03:07:33,068 [INFO] [http-nio-8888-exec-2] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 03:07:50,831 [INFO] [http-nio-8888-exec-3] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 03:07:51,487 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 03:10:07,781 [INFO] [http-nio-8888-exec-3] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 03:12:51,545 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 03:14:58,048 [INFO] [http-nio-8888-exec-1] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 03:15:50,409 [INFO] [http-nio-8888-exec-4] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 03:17:51,555 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
+2026-03-14 03:19:38,030 [INFO] [http-nio-8888-exec-6] com.example.websocket.WebSocketServer [WebSocketServer.java : 46] 有新窗口开始监听
+2026-03-14 03:20:33,578 [INFO] [http-nio-8888-exec-4] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 03:20:33,579 [INFO] [http-nio-8888-exec-8] com.example.websocket.WebSocketServer [WebSocketServer.java : 61] 有一连接关闭
+2026-03-14 03:22:51,572 [INFO] [AsyncResolver-bootstrap-executor-0] c.n.discovery.shared.resolver.aws.ConfigClusterResolver [ConfigClusterResolver.java : 43] Resolving eureka endpoints via configuration
