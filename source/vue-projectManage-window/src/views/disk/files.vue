@@ -293,11 +293,17 @@
                 });
                 this.currentFileIndex = index;
             },
-            seeBox(file) {
-                var file_url = file.fileUrl;
-                this.showInviteMember = true;
-                this.seeUrl = file_url;
-            },
+          seeBox(file) {
+            // 1. 构造真实的文件下载地址（这里必须和你的实际下载接口一致）
+            var downloadUrl = "http://127.0.0.1:8888/api/fileDownload?fileId=" + file.id;
+
+            // 2. kkFileView v4.x 核心修复：将 URL 进行 Base64 编码
+            var base64Url = window.btoa(downloadUrl);
+
+            // 3. 拼接最终的预览地址并显示
+            this.seeUrl = 'http://127.0.0.1:8012/onlinePreview?url=' + encodeURIComponent(base64Url);
+            this.showInviteMember = true;
+          },
             nextFile(file){
                 notice({
                     title: '下级文件',

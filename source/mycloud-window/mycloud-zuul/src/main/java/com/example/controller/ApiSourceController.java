@@ -116,7 +116,7 @@ public class ApiSourceController {
     }
 
     /**
-     * 用户下载文件,浏览器下载
+     * 用户下载文件,浏览器下载（已修复 Windows 路径提取与中文乱码问题）
      * @param response
      * @return
      */
@@ -124,21 +124,30 @@ public class ApiSourceController {
     public void downloadFile(HttpServletResponse response, @RequestParam Map<String, Object> params) {
         String fileId = MapGet.getByKey("fileId", params);
         Assert.isBlank(fileId, "参数错误");
-        //下载到本地
+
+        // 下载到本地
         String localFilePath = fileService.downloadLocal(fileId);
         if (StringUtils.isEmpty(localFilePath)){
             return;
         }
-        localFilePath = localFilePath.replace("\"", "");
-        String originalName = localFilePath.substring(localFilePath.lastIndexOf("/") +1);
+
+        // 核心修复1：统一路径分隔符，完美提取真实文件名
+        localFilePath = localFilePath.replace("\"", "").replace("\\", "/");
+        String originalName = localFilePath.substring(localFilePath.lastIndexOf("/") + 1);
+
         try {
-            //下载的文件携带这个名称
-            response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName="+ new String(originalName.getBytes("GB2312"),"ISO-8859-1"));
+            // 核心修复2：使用 UTF-8 URL 编码，彻底解决所有浏览器的中文乱码问题
+            String encodedFileName = java.net.URLEncoder.encode(originalName, "UTF-8").replaceAll("\\+", "%20");
+
+            // 设置响应头，声明为下载流
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment;filename=" + encodedFileName);
+
             FileInputStream fis = new FileInputStream(localFilePath);
             byte[] content = new byte[fis.available()];
             fis.read(content);
             fis.close();
+
             ServletOutputStream sos = response.getOutputStream();
             sos.write(content);
             sos.flush();
@@ -147,7 +156,6 @@ public class ApiSourceController {
             e.printStackTrace();
         }
     }
-
 
     /**
      * 获取企业网盘资源类型

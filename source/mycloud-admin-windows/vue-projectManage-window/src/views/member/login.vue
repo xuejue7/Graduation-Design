@@ -294,37 +294,39 @@
                     }
                 })
             },
-            loginSuccess(res) {
-                setTimeout(() => {
-                    const menu = getStore('menu', true);
-                    if (menu) {
-                        let routes = this.$router.options.routes;
-                        menu.forEach(function (v) {
-                            routes[0].children.push(createRoute(v));
-                            if (v.children) {
-                                v.children.forEach(function (v2) {
-                                    routes[0].children.push(createRoute(v2));
-                                    if (v2.children) {
-                                        v2.children.forEach(function (v3) {
-                                            routes[0].children.push(createRoute(v3));
-                                        });
-                                    }
-                                });
-                            }
+          loginSuccess(res) {
+            setTimeout(() => {
+              const menu = getStore('menu', true);
+              if (menu) {
+                // 1. 恢复动态路由挂载（丝滑体验的保证）
+                let routes = this.$router.options.routes;
+                menu.forEach(function (v) {
+                  routes[0].children.push(createRoute(v));
+                  if (v.children) {
+                    v.children.forEach(function (v2) {
+                      routes[0].children.push(createRoute(v2));
+                      if (v2.children) {
+                        v2.children.forEach(function (v3) {
+                          routes[0].children.push(createRoute(v3));
                         });
-                        this.loginBtn = false;
-                        this.$router.addRoutes(routes);
-                        let redirect = this.$route.query.redirect || config.HOME_PAGE;
-                        this.$router.push({
-                            path: redirect
-                        });
-                        this.$notification.success({
-                            message: '欢迎',
-                            description: `${res.data.member.username}，${timeFix()}，欢迎回来`,
-                        })
-                    }
-                }, 500);
-            },
+                      }
+                    });
+                  }
+                });
+                this.loginBtn = false;
+                this.$router.addRoutes(routes);
+
+                // 2. 弹出欢迎回来提示
+                this.$notification.success({
+                  message: '欢迎',
+                  description: `${res.data.member.username}，${timeFix()}，欢迎回来`,
+                });
+
+                // 3. 【终极杀招】避开空白的/home，直接跳转到网盘文件列表页！
+                this.$router.push({ path: '/disk/files' });
+              }
+            }, 500);
+          },
             requestFailed(err) {
                 this.$notification['error']({
                     message: '错误',

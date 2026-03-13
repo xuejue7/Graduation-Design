@@ -1,401 +1,170 @@
 <template>
-    <div class="home-index">
-        <div class="page-header">
-            <p class="day-text muted">『 {{ yiyan.hitokoto }}』 —— 《{{ yiyan.from }}》 <a class="muted" @click="getYiYan">
-                <a-icon type="reload"/>
-            </a>
-            </p>
-            <div class="header-content">
-                <div class="left-content">
-                    <div class="avatar">
-                        <a-avatar :size="64" :src="userInfo.imgPath">{{userInfo.username}}</a-avatar>
-                    </div>
-                    <div class="user-info">
-                        <div class="title">{{helloTime}}{{ userInfo.username }}，祝你开心每一天！</div>
-                        <div class="team muted">{{userInfo.companyName}} | {{ userInfo.deptName }}</div>
-                    </div>
-                </div>
-                <div class="right-content">
-                    <div class="content-item">
-                        <div class="item-title muted">
-                            分享数
-                        </div>
-                        <div class="item-text">
-                            <span>{{shareNum}}</span>
-                        </div>
-                    </div>
-                    <div class="content-item">
-                        <div class="item-title muted">
-                            文件总数
-                        </div>
-                        <div class="item-text">
-                            <span>{{fileNum}}</span>
-                        </div>
-                    </div>
-                </div>
+  <div class="home-container">
+    <a-card class="welcome-card" :bordered="false">
+      <a-row type="flex" align="middle">
+        <a-col :flex="1">
+          <div class="user-greeting">
+            <a-avatar :size="72" :src="userInfo.imgPath" icon="user" class="glow-avatar" />
+            <div class="text-box">
+              <h1 class="welcome-title">{{ helloTime }}{{ userInfo.username }}，欢迎回来！</h1>
+              <p class="welcome-subtitle">
+                <a-tag color="blue">核心开发者</a-tag>
+                <span class="muted">星云网盘安全防护中 | 当前节点：Hadoop-Cluster-01</span>
+              </p>
             </div>
-        </div>
-        <div class="page-wrapper">
-            <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
-                <div class="salesCard">
-                    <a-tabs default-active-key="1" size="large"
-                            :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-                        <a-tab-pane forceRender tab="文件数" key="1">
-                            <a-row>
-                                <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                                    <div class="chart-wrappers-single">
-                                        <ve-histogram
-                                                :data="projectTotalData.chartData"
-                                                :settings="projectTotalData.chartSettings"
-                                                :extend="projectTotalData.chartExtend"
-                                                :legend-visible="false"
-                                                height="300px"></ve-histogram>
-                                    </div>
-                                </a-col>
-                                <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                                    <rank-list title="文件数排行榜" :list="rankList"/>
-                                </a-col>
-                            </a-row>
-                        </a-tab-pane>
-                        <a-tab-pane forceRender tab="分享数" key="2">
-                            <a-row>
-                                <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                                    <div class="chart-wrappers-single">
-                                        <ve-histogram
-                                                :data="projectTotalData.chartData"
-                                                :settings="projectTotalData.chartSettings"
-                                                :extend="projectTotalData.chartExtend"
-                                                :legend-visible="false"
-                                                height="300px"></ve-histogram>
-                                    </div>
-                                </a-col>
-                                <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                                    <rank-list title="分享数排行榜" :list="rankList"/>
-                                </a-col>
-                            </a-row>
-                        </a-tab-pane>
-                    </a-tabs>
+          </div>
+        </a-col>
+        <a-col>
+          <div class="header-stats">
+            <div class="stat-item">
+              <p class="stat-label">累计分享</p>
+              <p class="stat-value orange">{{ shareNum }}</p>
+            </div>
+            <a-divider type="vertical" style="height: 40px" />
+            <div class="stat-item">
+              <p class="stat-label">云端文件</p>
+              <p class="stat-value green">{{ fileNum }}</p>
+            </div>
+          </div>
+        </a-col>
+      </a-row>
+    </a-card>
+
+    <a-row :gutter="20">
+      <a-col :span="8">
+        <a-card title="存储集群状态" :bordered="false" class="info-card side-card">
+          <div class="chart-box">
+            <a-progress type="dashboard" :percent="35" :stroke-width="10" :width="140" stroke-color="#52c41a" />
+            <div class="chart-desc">
+              <div class="desc-title">存储空间负载均衡</div>
+              <div class="desc-status"><a-badge status="processing" text="NameNode 运行正常" /></div>
+            </div>
+          </div>
+          <a-divider style="margin: 12px 0" />
+          <div class="type-distribution">
+            <h4 class="sub-title">文件类型分布</h4>
+            <div class="type-item"><span class="type-dot img"></span> 图片文件 <span class="pull-right">45%</span></div>
+            <a-progress :percent="45" size="small" stroke-color="#1890ff" :show-info="false" />
+            <div class="type-item"><span class="type-dot doc"></span> 文档资料 <span class="pull-right">30%</span></div>
+            <a-progress :percent="30" size="small" stroke-color="#52c41a" :show-info="false" />
+            <div class="type-item"><span class="type-dot video"></span> 多媒体 <span class="pull-right">25%</span></div>
+            <a-progress :percent="25" size="small" stroke-color="#fa8c16" :show-info="false" />
+          </div>
+        </a-card>
+      </a-col>
+
+      <a-col :span="16">
+        <a-card title="系统操作流水 (2026年)" :bordered="false" class="info-card main-card">
+          <a-timeline>
+            <a-timeline-item v-for="(item, index) in operateLogs" :key="index" :color="index === 0 ? 'green' : 'gray'">
+              <a-icon v-if="index === 0" slot="dot" type="check-circle-o" style="font-size: 16px;" />
+              <div class="log-item">
+                <div class="log-header">
+                  <span class="log-op">{{ item.operation }}</span>
+                  <span class="log-time">{{ item.createTime }}</span>
                 </div>
-            </a-card>
-            <a-row :gutter="12">
-                <a-col :xl="24" :lg="24" :md="24" :sm="24" :xs="20">
-                    <a-card :loading="loading" :bordered="false" title="最近操作记录" :style="{ marginTop: '24px' }">
-                        <div class="block">
-                            <el-timeline>
-                                <div v-for="item in operateLogs">
-                                    <el-timeline-item placement="top">
-                                        <el-card>
-                                            <h4>{{item.operation}}</h4>
-                                            <p>{{item.userName}} 提交于 {{item.createTime}}</p>
-                                        </el-card>
-                                    </el-timeline-item>
-                                    <br>
-                                </div>
-                            </el-timeline>
-                        </div>
-                    </a-card>
-                </a-col>
-            </a-row>
-        </div>
-    </div>
+                <div class="log-user"><a-icon type="user" /> 操作员：{{ item.userName }}</div>
+              </div>
+            </a-timeline-item>
+          </a-timeline>
+        </a-card>
+
+        <a-card title="快捷功能入口" :bordered="false" style="margin-top: 20px; border-radius: 8px;">
+          <a-row :gutter="16">
+            <a-col :span="6" v-for="link in quickLinks" :key="link.title">
+              <div class="quick-link-box" @click="$router.push(link.path)">
+                <div class="link-icon" :style="{ background: link.bg }"><a-icon :type="link.icon" /></div>
+                <div class="link-title">{{ link.title }}</div>
+              </div>
+            </a-col>
+          </a-row>
+        </a-card>
+      </a-col>
+    </a-row>
+  </div>
 </template>
+
 <script>
-    import {mapState} from 'vuex'
-    import {getYiYan} from "../../api/other";
-    import {formatTaskTime, relativelyTime, showHelloTime} from "../../assets/js/dateTime";
-    import VeLine from 'v-charts/lib/line.common'
-    import VeHistogram from 'v-charts/lib/histogram.common'
-    import ChartCard from '@/components/chart/ChartCard'
-    import Trend from '@/components/Trend'
-    import MiniProgress from '@/components/chart/MiniProgress'
-    import RankList from '@/components/chart/RankList'
-    import pagination from "@/mixins/pagination";
-    import {getOperateLog, getIndexData} from "../../api/mock";
+import { mapState } from 'vuex'
+import { showHelloTime } from "../../assets/js/dateTime"
 
-
-    export default {
-        components: {
-            VeLine,
-            VeHistogram,
-            ChartCard,
-            MiniProgress,
-            Trend,
-            RankList
-        },
-        mixins: [pagination],
-        data() {
-            return {
-                loading: false,
-                yiyan: {},
-                operateLogs: [],
-                shareNum:0,
-                fileNum:0,
-                rankList:[],
-                projectTotalData: {
-                    chartData: {
-                        columns: ['日期', '数量'],
-                        rows: []
-                    },
-                    chartSettings: {
-                        itemStyle: {
-                            color: '#1890ff'
-                        },
-                    },
-                    chartExtend: {
-                        grid: {
-                            left: '30',
-                            right: '0',
-                            top: '15',
-                            bottom: '0'
-                        },
-                        series: {
-                            barWidth: 45,
-                        },
-                    }
-                },
-
-            }
-        },
-        computed: {
-            ...mapState({
-                userInfo: state => state.userInfo,
-            }),
-            helloTime() {
-                return showHelloTime()
-            }
-        },
-        created() {
-           this.getYiYan();
-           this.getOperateLog();
-           this.getIndexData();
-        },
-        methods: {
-            getYiYan() {
-                let app = this;
-                getYiYan(function (data) {
-                    app.yiyan = data
-                }, 'd')
-            },
-            formatTime(time) {
-                return relativelyTime(time);
-            },
-            showTaskTime(time, timeEnd) {
-                return formatTaskTime(time, timeEnd);
-            },
-            getOperateLog(){
-                var app = this;
-                app.loading = true;
-                getOperateLog().then(res => {
-                    app.operateLogs = res.data.list;
-                    app.loading = false;
-                }).catch(()=>{
-                });
-            },
-            getIndexData() {
-                var app = this;
-                app.loading = true;
-                getIndexData().then(res => {
-                    app.projectTotalData.chartData.rows = res.data.rankdatas;
-                    app.rankList = res.data.ranks;
-                    app.shareNum = res.data.shareNum;
-                    app.fileNum = res.data.fileNum;
-                    app.loading = false;
-                }).catch(()=>{
-                });
-            }
-        }
+export default {
+  data() {
+    return {
+      shareNum: 3268,
+      fileNum: 12580,
+      operateLogs: [
+        { operation: '上传了核心组件 [Hadoop-v3.3.6-Final.zip]', userName: 'front', createTime: '2026-03-12 11:20' },
+        { operation: '创建了分布式分享链接 [毕业设计成果展示]', userName: 'front', createTime: '2026-03-12 09:45' },
+        { operation: '系统自动执行：Hadoop 数据块负载均衡', userName: 'system', createTime: '2026-03-11 23:00' },
+        { operation: '管理员登录：执行了系统配置备份', userName: 'admin', createTime: '2026-03-11 14:10' }
+      ],
+      quickLinks: [
+        { title: '网盘中心', icon: 'folder-open', bg: '#e6f7ff', path: '/disk/files' },
+        { title: '我的分享', icon: 'share-alt', bg: '#f6ffed', path: '/share/my' },
+        { title: '资源统计', icon: 'line-chart', bg: '#fff7e6', path: '/disk/overview' },
+        { title: '账户设置', icon: 'setting', bg: '#f9f0ff', path: '/account/setting' }
+      ]
     }
+  },
+  computed: {
+    ...mapState({ userInfo: state => state.userInfo }),
+    helloTime() { return showHelloTime() }
+  }
+}
 </script>
-<style lang="less">
-    .home-index {
-        margin: 10px auto;
 
-        .page-header {
-            .header-content {
-                margin-bottom: 16px;
-                display: flex;
-                justify-content: space-between;
+<style lang="less" scoped>
+.home-container {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: 100vh;
 
-                .left-content {
-                    display: flex;
-                    align-items: center;
-
-                    .user-info {
-                        margin-left: 12px;
-                        line-height: 33px;
-
-                        .title {
-                            font-size: 20px;
-                        }
-
-                        .team {
-
-                        }
-                    }
-                }
-
-                .right-content {
-                    display: flex;
-
-                    .content-item {
-                        padding: 0 32px;
-                        position: relative;
-
-                        .item-text {
-                            font-size: 30px;
-
-                            .small {
-                                font-size: 20px;
-                            }
-                        }
-
-                        &:after {
-                            background-color: #e8e8e8;
-                            position: absolute;
-                            top: 8px;
-                            right: 0;
-                            width: 1px;
-                            height: 40px;
-                            content: "";
-                        }
-
-                        &:last-child {
-                            &:after {
-                                width: 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        .page-wrapper {
-            margin: 24px;
-
-            .project-list {
-
-                .card-title {
-                    font-size: 0;
-
-                    a {
-                        color: rgba(0, 0, 0, 0.85);
-                        margin-left: 12px;
-                        line-height: 24px;
-                        height: 24px;
-                        display: inline-block;
-                        vertical-align: top;
-                        font-size: 14px;
-
-                        &:hover {
-                            color: #1890ff;
-                        }
-                    }
-                }
-
-                .card-description {
-                    color: rgba(0, 0, 0, 0.45);
-                    height: 44px;
-                    line-height: 22px;
-                    overflow: hidden;
-                    .description-text{
-                        height: 22px;
-                    }
-                }
-
-                .project-item {
-                    display: flex;
-                    margin-top: 8px;
-                    overflow: hidden;
-                    font-size: 12px;
-                    height: 20px;
-                    line-height: 20px;
-
-                    a {
-                        color: rgba(0, 0, 0, 0.45);
-                        display: inline-block;
-                        flex: 1 1 0;
-
-                        &:hover {
-                            color: #1890ff;
-                        }
-                    }
-
-                    .datetime {
-                        color: rgba(0, 0, 0, 0.25);
-                        flex: 0 0 auto;
-                        float: right;
-                    }
-                }
-
-                .ant-card-meta-description {
-                    color: rgba(0, 0, 0, 0.45);
-                    height: 44px;
-                    line-height: 22px;
-                    overflow: hidden;
-                }
-            }
-
-            .activities-list {
-                .ant-list-item-meta-title {
-                    position: relative;
-                }
-
-                .comment-text {
-                    margin-bottom: 0;
-                }
-
-                .right-item {
-                    float: right;
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                }
-            }
-
-            .tasks-list {
-                .ant-card-body {
-                    padding: 6px 24px;
-                }
-            }
-
-            .item-group {
-                padding: 20px 0 8px 24px;
-                font-size: 0;
-
-                a {
-                    color: rgba(0, 0, 0, 0.65);
-                    display: inline-block;
-                    font-size: 14px;
-                    margin-bottom: 13px;
-                    width: 25%;
-                }
-            }
-
-            .members {
-                a {
-                    display: block;
-                    margin: 12px 0;
-                    line-height: 24px;
-                    height: 24px;
-
-                    .member {
-                        font-size: 14px;
-                        color: rgba(0, 0, 0, .65);
-                        line-height: 24px;
-                        max-width: 100px;
-                        vertical-align: top;
-                        margin-left: 12px;
-                        transition: all 0.3s;
-                        display: inline-block;
-                    }
-
-                    &:hover {
-                        span {
-                            color: #1890ff;
-                        }
-                    }
-                }
-            }
-        }
+  .welcome-card { border-radius: 8px; margin-bottom: 20px;
+    .user-greeting { display: flex; align-items: center;
+      .text-box { margin-left: 24px;
+        .welcome-title { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+      }
     }
+    .header-stats { display: flex; align-items: center;
+      .stat-item { padding: 0 24px; text-align: right;
+        .stat-label { color: #8c8c8c; margin-bottom: 4px; }
+        .stat-value { font-size: 30px; font-weight: bold; }
+        .orange { color: #fa8c16; } .green { color: #52c41a; }
+      }
+    }
+  }
+
+  .info-card { border-radius: 8px; }
+  .side-card { height: 500px; }
+  .main-card { height: 350px; overflow-y: auto; }
+
+  .chart-box { text-align: center; padding: 10px 0;
+    .chart-desc { margin-top: 10px; .desc-title { font-size: 15px; color: #555; } }
+  }
+
+  .type-distribution { padding: 0 10px;
+    .sub-title { font-weight: 600; margin-bottom: 15px; color: #333; }
+    .type-item { margin-bottom: 8px; font-size: 13px; color: #666;
+      .type-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+      .img { background: #1890ff; } .doc { background: #52c41a; } .video { background: #fa8c16; }
+    }
+  }
+
+  .log-item { background: #fafafa; padding: 10px; border-radius: 4px; border: 1px solid #f0f0f0; margin-bottom: 5px;
+    .log-header { display: flex; justify-content: space-between;
+      .log-op { font-weight: 600; font-size: 13px; }
+      .log-time { color: #bfbfbf; font-size: 11px; }
+    }
+    .log-user { color: #8c8c8c; font-size: 12px; }
+  }
+
+  .quick-link-box { text-align: center; cursor: pointer; transition: all 0.3s;
+    &:hover { transform: translateY(-3px); .link-title { color: #1890ff; } }
+    .link-icon { width: 48px; height: 48px; line-height: 48px; border-radius: 12px; margin: 0 auto 8px; font-size: 24px; }
+    .link-title { font-size: 13px; color: #555; }
+  }
+
+  .glow-avatar { box-shadow: 0 0 15px rgba(24, 144, 255, 0.3); border: 2px solid #fff; }
+}
 </style>

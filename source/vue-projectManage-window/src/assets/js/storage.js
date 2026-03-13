@@ -1,4 +1,5 @@
 export const PREFIX = 'ep_';
+
 /**
  * 存储localStorage
  * @param name
@@ -29,15 +30,27 @@ export const setStore = (name, content, set_time = false, duration = 0) => {
  * 获取localStorage
  * @param name
  * @param parse // 是否json格式化
- * @returns {boolean}
+ * @returns {boolean|any}
  */
 export const getStore = (name, parse = false) => {
     if (!name) return false;
     name = PREFIX + name;
-    if (parse) {
-        return JSON.parse(window.localStorage.getItem(name))
+    let content = window.localStorage.getItem(name);
+
+    // 防御性拦截：如果拿到的是空值或者字符串的 'undefined'，直接返回 null，防止崩溃
+    if (!content || content === 'undefined' || content === '') {
+        return null;
     }
-    return window.localStorage.getItem(name)
+
+    if (parse) {
+        try {
+            return JSON.parse(content);
+        } catch (e) {
+            window.localStorage.removeItem(name);
+            return null;
+        }
+    }
+    return content;
 };
 
 /**

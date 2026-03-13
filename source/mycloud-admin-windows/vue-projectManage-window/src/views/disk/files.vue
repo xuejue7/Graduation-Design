@@ -293,11 +293,17 @@
                 });
                 this.currentFileIndex = index;
             },
-            seeBox(file) {
-                var file_url = file.fileUrl;
-                this.showInviteMember = true;
-                this.seeUrl = file_url;
-            },
+          seeBox(file) {
+            // 1. 构造下载地址，强制加上 &fullfilename=... 告诉 kkFileView 这是一个什么格式的文件
+            var downloadUrl = "http://127.0.0.1:8888/api/fileDownload?fileId=" + file.id + "&fullfilename=" + encodeURIComponent(file.originalName);
+
+            // 2. 极其关键：安全的 Base64 编码（完美支持中文文件名，防止乱码崩溃）
+            var base64Url = window.btoa(unescape(encodeURIComponent(downloadUrl)));
+
+            // 3. 拼接最终的 kkFileView 预览地址
+            this.seeUrl = 'http://127.0.0.1:8012/onlinePreview?url=' + encodeURIComponent(base64Url);
+            this.showInviteMember = true;
+          },
             nextFile(file){
                 notice({
                     title: '下级文件',

@@ -97,7 +97,7 @@
                         </a-layout-content>
                          <a-footer style="text-align: center">
                              <template>
-                                 <span @click="footerClick">  Copyright © 2019 华东交通大学 蓝星花 </span>
+                                 <span @click="footerClick">  Copyright © 2026 吉林财经大学 xue702 </span>
                              </template>
                          </a-footer>
                       <!--  </vue-scroll>-->
