@@ -77,10 +77,19 @@
                     }
                 })
             },
-            seeBox(file) {
-                this.showInviteMember = true;
-                this.seeUrl = "http://localhost:8012/disk/"+ file.fileName;
-            },
+          // 🌟 优化：彻底修复提取界面的预览功能，让它不再崩溃！
+          seeBox(file) {
+            var downloadUrl = "http://127.0.0.1:8888/api/fileDownload?fileId=" + file.fileId + "&fullfilename=" + encodeURIComponent(file.fileName);
+            var ext = file.fileName.substring(file.fileName.lastIndexOf('.') + 1).toLowerCase();
+
+            if (['png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt'].includes(ext)) {
+              this.seeUrl = downloadUrl;
+            } else {
+              var base64Url = window.btoa(unescape(encodeURIComponent(downloadUrl)));
+              this.seeUrl = 'http://127.0.0.1:8012/onlinePreview?url=' + encodeURIComponent(base64Url);
+            }
+            this.showInviteMember = true;
+          },
         }
     }
 </script>

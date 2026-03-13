@@ -120,37 +120,47 @@ public class ApiSourceController {
      * @param response
      * @return
      */
+    /**
+     * 用户下载文件,浏览器下载（已修复文件流截断导致的图片损坏和预览失败问题）
+     * @param response
+     * @return
+     */
     @RequestMapping("/fileDownload")
     public void downloadFile(HttpServletResponse response, @RequestParam Map<String, Object> params) {
         String fileId = MapGet.getByKey("fileId", params);
         Assert.isBlank(fileId, "参数错误");
 
-        // 下载到本地
         String localFilePath = fileService.downloadLocal(fileId);
         if (StringUtils.isEmpty(localFilePath)){
             return;
         }
 
-        // 核心修复1：统一路径分隔符，完美提取真实文件名
         localFilePath = localFilePath.replace("\"", "").replace("\\", "/");
         String originalName = localFilePath.substring(localFilePath.lastIndexOf("/") + 1);
 
         try {
-            // 核心修复2：使用 UTF-8 URL 编码，彻底解决所有浏览器的中文乱码问题
             String encodedFileName = java.net.URLEncoder.encode(originalName, "UTF-8").replaceAll("\\+", "%20");
 
-            // 设置响应头，声明为下载流
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment;filename=" + encodedFileName);
+            // 🌟 智能识别文件类型，允许浏览器直接预览图片和PDF 🌟
+            String contentType = java.nio.file.Files.probeContentType(java.nio.file.Paths.get(localFilePath));
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+            response.setContentType(contentType);
+            // 核心修改：使用 inline 而不是 attachment，直接在网页内打开！
+            response.setHeader("Content-Disposition", "inline;filename=" + encodedFileName);
 
-            FileInputStream fis = new FileInputStream(localFilePath);
-            byte[] content = new byte[fis.available()];
-            fis.read(content);
-            fis.close();
+            java.io.FileInputStream fis = new java.io.FileInputStream(localFilePath);
+            javax.servlet.ServletOutputStream sos = response.getOutputStream();
 
-            ServletOutputStream sos = response.getOutputStream();
-            sos.write(content);
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = fis.read(buffer)) != -1) {
+                sos.write(buffer, 0, len);
+            }
+
             sos.flush();
+            fis.close();
             sos.close();
         } catch (Exception e) {
             e.printStackTrace();
