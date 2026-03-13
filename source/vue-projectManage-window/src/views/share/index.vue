@@ -14,12 +14,25 @@
                 </div>
             </div>
         </div>
-        <div class="layout-item right">
-            <div class="header">
-                <div class="title">
-                    <span>{{currentMenu.title}} · {{pagination.total}}</span>
-                </div>
-            </div>
+      <div class="layout-item right">
+        <div style="margin: 0 12px 24px 0; padding: 24px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; align-items: center;">
+                <span style="font-size: 16px; font-weight: bold; margin-right: 20px;">
+                    <a-icon type="link" style="color: #1890ff; margin-right: 8px;"/>快捷提取文件
+                </span>
+          <a-input-search
+              placeholder="请粘贴分享链接 (例如: http://127.0.0.1:8045/#/share/link?code=xxx)"
+              enter-button="立即提取"
+              size="large"
+              style="flex: 1; max-width: 600px;"
+              @search="onExtractLink"
+          />
+        </div>
+
+        <div class="header">
+          <div class="title">
+            <span>{{currentMenu.title}} · {{pagination.total}}</span>
+          </div>
+        </div>
             <div class="members-content">
                 <vue-scroll ref="contentscroll">
                     <a-list
@@ -106,11 +119,39 @@
             this.currentMenu = this.menus[0];
             this.getMembers({key: 0});
         },
-        methods: {
-            seeDetail(item) {
-                this.showInviteMember = true;
-                this.seeUrl = "http://localhost:8012/disk/"+ item.fileName;
-            },
+      methods: {
+        // 🌟 优化：一键解析链接并在新标签页打开提取页
+        onExtractLink(value) {
+          if (!value) {
+            this.$message.warning('请输入分享链接！');
+            return;
+          }
+          let code = value;
+          if (value.includes('code=')) {
+            code = value.split('code=')[1].split('&')[0];
+          } else if (value.includes('/share/link/')) {
+            code = value.substring(value.lastIndexOf('/') + 1);
+          }
+          let routeUrl = this.$router.resolve({
+            path: '/share/link',
+            query: { code: code }
+          });
+          window.open(routeUrl.href, '_blank');
+        },
+
+        // 🌟 优化：修复分享列表里原本粗糙的预览功能，强制走官方下载通道
+        seeDetail(item) {
+          var downloadUrl = "http://127.0.0.1:8888/api/fileDownload?fileId=" + item.fileId + "&fullfilename=" + encodeURIComponent(item.fileName);
+          var ext = item.fileName.substring(item.fileName.lastIndexOf('.') + 1).toLowerCase();
+
+          if (['png', 'jpg', 'jpeg', 'gif', 'pdf', 'txt'].includes(ext)) {
+            this.seeUrl = downloadUrl;
+          } else {
+            var base64Url = window.btoa(unescape(encodeURIComponent(downloadUrl)));
+            this.seeUrl = 'http://127.0.0.1:8012/onlinePreview?url=' + encodeURIComponent(base64Url);
+          }
+          this.showInviteMember = true;
+        },
             getMembers({key} = {}) {
                 let app = this;
                 if (key != undefined) {

@@ -307,7 +307,7 @@ public class AppFileController {
         innerDownLoadFileByAsyn(userEntity, fileEntity);
     }
 
-    @Async
+//    @Async
     public void innerDownLoadFileByAsyn(SysUserEntity userEntity, FileEntity fileEntity){
         System.out.println("线程名称："+Thread.currentThread().getName() + " 下载文件!"+fileEntity.getOriginalName());
         //文件下载
