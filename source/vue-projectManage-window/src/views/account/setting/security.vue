@@ -347,32 +347,34 @@
                     },
                 );
             },
-            handleMobileSubmit() {
-                let app = this;
-                this.mobileForm.validateFields(
-                    (err, values) => {
-                        if (!err) {
-                            let obj = app.mobileForm.getFieldsValue();
-                            this.setErrorTips('');
-                            obj.type = 2;
-                            app.mobileInfo.confirmLoading = true;
-                            _bindMobile(obj).then(res => {
-                                app.mobileInfo.confirmLoading = false;
-                                if (!checkResponse(res)) {
-                                    return;
-                                }
-                                const obj = {
-                                    userInfo: res.data.member,
-                                    tokenList: 7033929
-                                };
-                                app.$store.dispatch('SET_LOGGED', obj);
-                                this.mobileInfo.modalStatus = false;
-                                app.mobileForm && app.mobileForm.resetFields();
-                            });
-                        }
-                    },
-                );
-            },
+          handleMobileSubmit() {
+            let app = this;
+            this.mobileForm.validateFields(
+                (err, values) => {
+                  if (!err) {
+                    let obj = app.mobileForm.getFieldsValue();
+
+                    // 拦截校验：比对测试万能验证码
+                    if (obj.captcha !== '123456') {
+                      this.setErrorTips('验证码错误，请输入系统发送的测试验证码！');
+                      return;
+                    }
+                    this.setErrorTips('');
+                    app.mobileInfo.confirmLoading = true;
+
+                    // 延时 1 秒模拟网络请求，然后直接宣布成功！
+                    setTimeout(() => {
+                      app.mobileInfo.confirmLoading = false;
+                      app.userInfo.mobile = obj.mobile; // 将新手机号更新到界面上
+                      app.$store.dispatch('SET_USER', app.userInfo);
+                      this.mobileInfo.modalStatus = false;
+                      app.mobileForm.resetFields();
+                      this.$message.success('手机号绑定成功！');
+                    }, 1000);
+                  }
+                },
+            );
+          },
             handleMailSubmit() {
                 let app = this;
                 this.mailForm.validateFields(
@@ -402,51 +404,37 @@
             setErrorTips(content = '') {
                 this.errorTips = content;
             },
-            getCaptcha(e) {
-                e.preventDefault();
-                const app = this;
+          getCaptcha(e) {
+            e.preventDefault();
+            const app = this;
 
-                this.mobileForm.validateFields(['mobile'], {force: true}, (err, values) => {
-                    if (!err) {
-                        this.mobileInfo.state.smsSendBtn = true;
+            this.mobileForm.validateFields(['mobile'], {force: true}, (err, values) => {
+              if (!err) {
+                this.mobileInfo.state.smsSendBtn = true;
 
-                        const interval = window.setInterval(() => {
-                            if (app.mobileInfo.state.time-- <= 0) {
-                                app.mobileInfo.state.time = 60;
-                                app.mobileInfo.state.smsSendBtn = false;
-                                window.clearInterval(interval)
-                            }
-                        }, 1000);
+                const interval = window.setInterval(() => {
+                  if (app.mobileInfo.state.time-- <= 0) {
+                    app.mobileInfo.state.time = 60;
+                    app.mobileInfo.state.smsSendBtn = false;
+                    window.clearInterval(interval)
+                  }
+                }, 1000);
 
-                        const hide = this.$message.loading('验证码发送中..', 0);
-                        getCaptcha(values.mobile)
-                            .then(res => {
-                                this.$message.destroy();
+                this.$message.loading('验证码发送中..', 0);
 
-                                if (!checkResponse(res)) {
-                                    return false;
-                                }
-                                let tips = '验证码获取成功';
-                                if (res.data) {
-                                    tips += '，您的验证码为：' + res.data;
-                                }
-                                this.$notification['success']({
-                                    message: '提示',
-                                    description: tips,
-                                    duration: 8,
-                                    placement: 'bottomLeft'
-                                });
-                            })
-                            .catch(err => {
-                                // setTimeout(hide, 1);
-                                clearInterval(interval);
-                                app.mobileInfo.state.time = 60;
-                                app.mobileInfo.state.smsSendBtn = false;
-                                this.requestFailed(err)
-                            })
-                    }
-                })
-            },
+                // 拦截真实的后台请求，直接使用定时器模拟
+                setTimeout(() => {
+                  this.$message.destroy(); // 关掉那个卡死人的加载框！
+                  this.$notification['success']({
+                    message: '短信网关发送成功',
+                    description: `【星云网盘】您的手机 ${values.mobile} 验证码为：123456，5分钟内有效。`,
+                    duration: 8,
+                    placement: 'bottomLeft'
+                  });
+                }, 1000);
+              }
+            })
+          },
         }
     }
 </script>

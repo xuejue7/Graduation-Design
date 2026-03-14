@@ -9,132 +9,67 @@ import config from "../config/config";
 import {refreshAccessToken} from "../api/common/common";
 
 Vue.use(Router);
-const routes = [].concat(
-    Home
-);
-// const router = new Router({
-//     routes: routers
-// });
+const routes = [].concat(Home);
+
 const menu = getStore('menu', true);
-//后台查询出来的菜单注册到路由里面
-if (menu) {
+// 🌟 安全注入动态路由，过滤无 path 的空壳，保护 Vue Router 不死
+if (menu && Array.isArray(menu)) {
+    const safePush = (v) => {
+        if (!v) return;
+        try {
+            let r = createRoute(v);
+            if (r && r.path) routes.push(r);
+        } catch (e) {}
+    };
     menu.forEach(function (v) {
-        routes.push(createRoute(v));
+        safePush(v);
         if (v.children) {
             v.children.forEach(function (v2) {
-                routes.push(createRoute(v2));
+                safePush(v2);
                 if (v2.children) {
-                    v2.children.forEach(function (v3) {
-                        routes.push(createRoute(v3));
-                    });
+                    v2.children.forEach(function (v3) { safePush(v3); });
                 }
             });
         }
     });
 }
+
 const router = new Router({
     routes: [
+        { path: '/', name: 'index', component: Index, children: routes },
         {
-            path: '/',
-            name: 'index',
-            component: Index,
-            children: routes
-        },
-        {
-            name: 'member',
-            path: '/member',
-            component: resolve => require(['@/components/layout/UserLayout'], resolve),
-            meta: {model: 'Login'},
+            name: 'member', path: '/member', component: resolve => require(['@/components/layout/UserLayout'], resolve), meta: {model: 'Login'},
             children: [
-                {
-                    path: 'login',
-                    name: 'login',
-                    component: () => import(/* webpackChunkName: "user" */ '@/views/member/login'),
-                    meta: {model: 'Login'},
-                },
-                {
-                    path: 'register',
-                    name: 'register',
-                    component: () => import(/* webpackChunkName: "user" */ '@/views/member/Register'),
-                    meta: {model: 'Login'},
-                },
-                {
-                    path: 'forget',
-                    name: 'forget',
-                    component: () => import(/* webpackChunkName: "user" */ '@/views/member/forget'),
-                    meta: {model: 'Login'},
-                }
+                { path: 'login', name: 'login', component: () => import('@/views/member/login'), meta: {model: 'Login'} },
+                { path: 'register', name: 'register', component: () => import('@/views/member/Register'), meta: {model: 'Login'} },
+                { path: 'forget', name: 'forget', component: () => import('@/views/member/forget'), meta: {model: 'Login'} }
             ]
         },
-        {
-            name: 'install',
-            path: '/install',
-            component: resolve => require(['@/views/error/install'], resolve),
-            meta: {model: 'error'},
-        },
-        {
-            name: 'resetEmail',
-            path: '/reset/email',
-            component: resolve => require(['@/views/reset/email'], resolve),
-            meta: {model: 'error'},
-        },
-        {
-            name: '404',
-            path: '/404',
-            component: resolve => require(['@/views/error/404'], resolve),
-            meta: {model: 'error'},
-        },
-        {
-            name: '403',
-            path: '/403',
-            component: resolve => require(['@/views/error/403'], resolve),
-            meta: {model: 'error'},
-        }
+        { name: 'install', path: '/install', component: resolve => require(['@/views/error/install'], resolve), meta: {model: 'error'} },
+        { name: 'resetEmail', path: '/reset/email', component: resolve => require(['@/views/reset/email'], resolve), meta: {model: 'error'} },
+        { name: '404', path: '/404', component: resolve => require(['@/views/error/404'], resolve), meta: {model: 'error'} },
+        { name: '403', path: '/403', component: resolve => require(['@/views/error/403'], resolve), meta: {model: 'error'} }
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    console.log(to);
     let tokenList = getStore('tokenList', true);
-    if (tokenList) {
-        let refreshToken = tokenList.refreshToken;
-        let accessTokenExp = tokenList.accessTokenExp;
-        //判断accessToken即将到期后刷新token
-        if (accessTokenExp && isTokenExpired(accessTokenExp)) {
-            refreshAccessToken(refreshToken).then(res => {
-                tokenList.accessToken = res.data.accessToken;
-                tokenList.accessTokenExp = res.data.accessTokenExp;
-                setStore('tokenList', tokenList);
-            });
-        }
+    if (tokenList && tokenList.accessTokenExp && isTokenExpired(tokenList.accessTokenExp)) {
+        refreshAccessToken(tokenList.refreshToken).then(res => {
+            tokenList.accessToken = res.data.accessToken;
+            tokenList.accessTokenExp = res.data.accessTokenExp;
+            setStore('tokenList', tokenList);
+        }).catch(()=>{});
     }
-    const HOME_PAGE = config.HOME_PAGE;
-    //页面中转
-    if (to.name === 'index' || to.path === '/index' || to.path === '/') {
-        next({path: HOME_PAGE});
-        return false;
-    }
-    //无效页面跳转至首页
-    if (!to.name && from.meta.model !== 'Login' && to.path !== HOME_PAGE) {
-        next({path: '/404'});
-        return false;
-    }
-    if (to.meta.model === 'Login' && store.state.logged) {
-        next({path: HOME_PAGE});
-        return false;
-    }
+    const HOME_PAGE = config.HOME_PAGE || '/home';
+    if (to.path === '/' || to.path === '/index') { return next({path: HOME_PAGE}); }
+    if (!to.name && from.meta.model !== 'Login' && to.path !== HOME_PAGE) { return next({path: '/404'}); }
+    if (to.meta.model === 'Login' && store.state.logged) { return next({path: HOME_PAGE}); }
     if (!store.state.logged && to.meta.model !== 'Login' && to.meta.model !== 'error') {
-        next({
-            name: 'login',
-            query: {redirect: to.fullPath}
-        });
-        return false;
+        return next({ name: 'login', query: {redirect: to.fullPath} });
     }
     next();
 });
-router.afterEach(route => {
-    //预留
-    // window.scrollTo(0,0)
-});
 
-export default router
+router.afterEach(() => {});
+export default router;

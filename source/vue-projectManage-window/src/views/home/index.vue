@@ -101,9 +101,10 @@ export default {
       ],
       quickLinks: [
         { title: '网盘中心', icon: 'folder-open', bg: '#e6f7ff', path: '/disk/files' },
-        { title: '我的分享', icon: 'share-alt', bg: '#f6ffed', path: '/share/my' },
+        { title: '我的分享', icon: 'share-alt', bg: '#f6ffed', path: '/share/my' }, // 现在这个不会404了
         { title: '资源统计', icon: 'line-chart', bg: '#fff7e6', path: '/disk/overview' },
-        { title: '账户设置', icon: 'setting', bg: '#f9f0ff', path: '/account/setting' }
+        // 🌟 核心修复：之前的 /account/setting 是个空壳，必须精确到 /base
+        { title: '账户设置', icon: 'setting', bg: '#f9f0ff', path: '/account/setting/base' }
       ]
     }
   },

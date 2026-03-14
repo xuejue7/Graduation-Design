@@ -253,30 +253,29 @@
             downLoad(file) {
                 window.open("http://localhost:8888/api/fileDownload?fileId="+file.id);
             },
-            getFiles(reset = true) {
-                let app = this;
-                if (reset) {
-                    this.pagination.page = 1;
-                    this.pagination.pageSize = 50;
-                    this.showLoadingMore = false;
-                }
-                app.requestData.parentId = this.parentId;
-                this.loading = true;
-                getFiles(app.requestData).then(res => {
-                    this.loading = false;
-                    if (reset) {
-                        this.files = [];
-                    }
-                    res.data.list.forEach((v) => {
-                        v.editing = false;
-                    });
-                    app.files = app.files.concat(res.data.list);
-                    app.pagination.total = res.data.total;
-                    app.showLoadingMore = app.pagination.total > app.files.length;
-                    app.loading = false;
-                    app.loadingMore = false
-                })
-            },
+          getFiles(reset = true) {
+            let app = this;
+            if (reset) {
+              this.pagination.page = 1;
+              this.pagination.pageSize = 50;
+              this.showLoadingMore = false;
+            }
+            app.requestData.parentId = this.parentId;
+            this.loading = true;
+
+            getFiles(app.requestData).then(res => {
+              this.loading = false;
+              if (reset) { this.files = []; }
+              res.data.list.forEach((v) => { v.editing = false; });
+              app.files = app.files.concat(res.data.list);
+              app.pagination.total = res.data.total;
+              app.showLoadingMore = app.pagination.total > app.files.length;
+            }).catch(err => {
+              // 🌟 核心修复：加上这一句，就算后端崩溃，页面也会立刻停止转圈！
+              this.loading = false;
+              this.$message.error('获取文件失败，请检查后端是否启动');
+            });
+          },
             onLoadMore() {
                 this.loadingMore = true;
                 this.pagination.page++;
